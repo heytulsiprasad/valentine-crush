@@ -1,63 +1,60 @@
-import clsx from 'clsx'
-import './App.css'
-import { useState } from 'react';
+import "./App.css";
+import Layout from "./components/Layout";
 
-const DEFAULT_TEXTS = [
-  'No',
-  'Are you sure?',
-  'Think about it!',
-  "I'm waiting!",
-  'Last chance',
-];
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
 
+const pages = import.meta.glob("./pages/**/*.jsx", { eager: true });
 
-function App() {
-    
-  const [scaleNo, setScaleNo] = useState(1);
-  const [scaleYes, setScaleYes] = useState(1);
-  const [text, setText] = useState(DEFAULT_TEXTS[0]);
-  const [ctr, setCtr] = useState(0);
+// Creates a routes array
+const routes = [];
 
-  const handleNo = () => {
-    setText(DEFAULT_TEXTS[ctr + 1]);
-    setCtr((prev) => prev + 1);
-    setScaleNo((prev) => prev - 0.2);
-    setScaleYes((prev) => prev + 0.1);
-  };
+// Create array of all restricted routes
+// eg: ['/dashboard', '/dashboard/:id']
+const restricted = ["/dashboard"];
 
+// Loop through all pages and add them to the routes array
+for (const path of Object.keys(pages)) {
+  const fileName = path.match(/\.\/pages\/(.*)\.jsx$/)?.[1];
+  if (!fileName) {
+    continue;
+  }
 
-  return (
-       <main className={clsx('h-screen w-screen bg-white')}>
-      <div className="h-full w-full flex flex-col gap-y-8 items-center justify-center">
-        <div>
-          <img
-            src="/ask.gif"
-            alt="milk and mocha"
-            className="rounded-2xl"
-          />
-        </div>
-        <div className="flex flex-col gap-y-12 items-center mt-8">
-          <h1 className="text-5xl mdmax:text-4xl smmax:text-3xl italic text-center text-black">
-            Will you be my valentine?
-          </h1>
-          <div className="flex gap-8 mdmax:flex-col">
-            <Button
-              onClick={() => history.push('/success')}
-              style={{ transform: `scale(${scaleYes})` }}
-            >
-              Yes
-            </Button>
-            <Button
-              onClick={handleNo}
-              style={{ transform: `scale(${scaleNo})` }}
-            >
-              {text}
-            </Button>
-          </div>
-        </div>
-      </div>
-    </main>
-  )
+  const normalizedPathName = fileName.includes("$")
+    ? fileName.replace("$", ":")
+    : fileName.replace(/\/index/, "");
+
+  routes.push({
+    path: fileName === "index" ? "/" : `/${normalizedPathName.toLowerCase()}`,
+    Element: pages[path].default,
+    loader: pages[path]?.loader,
+    action: pages[path]?.action,
+    ErrorBoundary: pages[path]?.ErrorBoundary,
+  });
 }
 
-export default App
+// Create a router with the routes array
+const router = createBrowserRouter(
+  routes.map(({ Element, ErrorBoundary, ...rest }) => ({
+    ...rest,
+    element: restricted.includes(rest.path) ? (
+      <ProtectedRoute>
+        <Element />
+      </ProtectedRoute>
+    ) : (
+      <Element />
+    ),
+    ...(ErrorBoundary && { errorElement: <ErrorBoundary /> }),
+  }))
+);
+
+// Add all routes within RouterProvider
+function App() {
+  return (
+    <Layout>
+      <RouterProvider router={router} />
+    </Layout>
+  );
+}
+
+export default App;
