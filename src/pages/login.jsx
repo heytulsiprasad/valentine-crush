@@ -21,7 +21,7 @@ function Login() {
   };
 
   return (
-    <main className="flex items-center justify-center bg-white">
+    <main className="grow flex flex-col items-center justify-center">
       <Button onClick={handleClick} small={false}>
         Sign in with Google
       </Button>

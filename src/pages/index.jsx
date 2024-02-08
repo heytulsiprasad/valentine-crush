@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import heroImg from "../assets/hero.gif";
 
@@ -27,7 +27,7 @@ function Hero() {
   };
 
   return (
-    <main className="bg-white">
+    <main className="bg-white grow flex flex-col items-center justify-center">
       <div className="h-full w-full flex flex-col gap-y-8 items-center justify-center">
         <div>
           <img src={heroImg} alt="milk and mocha" className="rounded-2xl" />
