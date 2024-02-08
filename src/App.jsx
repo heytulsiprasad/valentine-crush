@@ -1,4 +1,5 @@
 import Layout from "./components/Layout";
+import { AuthProvider } from "./context/AuthContext";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -50,9 +51,11 @@ const router = createBrowserRouter(
 // Add all routes within RouterProvider
 function App() {
   return (
-    <Layout>
-      <RouterProvider router={router} />
-    </Layout>
+    <AuthProvider>
+      <Layout>
+        <RouterProvider router={router} />
+      </Layout>
+    </AuthProvider>
   );
 }
 
