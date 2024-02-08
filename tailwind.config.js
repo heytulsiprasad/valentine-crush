@@ -2,7 +2,14 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        xlmax: { max: "90rem" },
+        lgmax: { max: "68rem" },
+        mdmax: { max: "45rem" },
+        smmax: { max: "35rem" },
+      },
+    },
   },
   plugins: [],
 };
