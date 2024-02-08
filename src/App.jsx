@@ -1,5 +1,7 @@
 import Layout from "./components/Layout";
 import { AuthProvider } from "./context/AuthContext";
+import '@mantine/core/styles.css';
+import { MantineProvider } from '@mantine/core';
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -51,11 +53,13 @@ const router = createBrowserRouter(
 // Add all routes within RouterProvider
 function App() {
   return (
-    <AuthProvider>
-      <Layout>
-        <RouterProvider router={router} />
-      </Layout>
-    </AuthProvider>
+    <MantineProvider>
+      <AuthProvider>
+        <Layout>
+          <RouterProvider router={router} />
+        </Layout>
+      </AuthProvider>
+    </MantineProvider>
   );
 }
 

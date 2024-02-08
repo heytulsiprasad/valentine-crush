@@ -1,16 +1,15 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
-import Button from './Button';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '@/config/firebase';
-import toast from 'react-hot-toast';
+import React from "react";
+import Button from "./Button";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
 
 const PhoneNumber = ({ user, setIsPhoneAvailable }) => {
-  const [phoneNumber, setPhoneNumber] = React.useState('');
+  const [phoneNumber, setPhoneNumber] = React.useState("");
 
   const formhandler = async (e) => {
     e.preventDefault();
-    const dataRef = doc(db, 'users', user.uid, 'userData', 'details');
+    const dataRef = doc(db, "users", user.uid, "userData", "details");
 
     if (phoneNumber && phoneNumber.length >= 10) {
       await setDoc(dataRef, {
@@ -19,9 +18,9 @@ const PhoneNumber = ({ user, setIsPhoneAvailable }) => {
 
       setIsPhoneAvailable(true);
 
-      toast.success('Added your number successfully!');
+      // toast.success("Added your number successfully!");
     } else {
-      toast.error('Add a valid number!');
+      // toast.error("Add a valid number!");
     }
   };
 
