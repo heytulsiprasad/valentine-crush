@@ -1,5 +1,4 @@
 import successImg from "../assets/success.gif";
-import clsx from "clsx";
 
 const Success = () => {
   return (
